@@ -21,47 +21,31 @@ pkg install nano
 pkg install php 
 pkg install sqlite
 pkg install git
-git clone https://github.com/Andiquis/cingles
+git clone https://github.com/Andiquis/eureka
 ls
-cd cingles
+cd eureka
 chmod +x *
 ls
-php -S 0.0.0.0:8001
+bash go.sh
 ```
 ## Acceso a la Aplicación
 
-Una vez que el servidor esté en ejecución, abre tu navegador móvil y accede a:
-http://localhost:8001
+La aplicacion debio iniciarce automaticamente despues de ejecutar el archivo go.sh
 
 
-¡Ahora puedes disfrutar de tu aplicación web en tu teléfono!
+¡Ya puedes disfrutar de tu aplicación web en tu teléfono!
 
 ### Notas
 
 - Asegúrate de tener una conexión de red adecuada para acceder a la aplicación.
-- Para detener el servidor, puedes usar Ctrl + C en la terminal donde lo ejecutaste.
-
-
-### Opcional
-
-  -Este paso es para automatizar el encendido del servidor y iniciar la aplicacion en el navegador de manera automatica en la vamos a configurar el archivo de arranque de termux para que el servidor arranque al momento de entrar a termux
- ```bash
-cd $HOME
-cd ..
-cd usr
-cd etc
-nano bash.bashrc
-```
-En el final del codigo de bash.bashrc adicionar las siguientes lineas de codigo
+- Para detener el servidor, puedes usar Ctrl + C en la terminal donde lo ejecutaste. > version anterior
+- para detener el servidor puedes listar procesor y eliminar el proceso de tu servidor.
 ```bash
-cd $HOME/cingles
-bash start.sh &
-am start -n com.android.chrome/com.google.android.apps.chrome.Main -d http://127.0.0.1:8001/index.php &
+ps aux
+kill <PID>
 ```
-  Guarda el archivo y reinicia termux.
-  
   para visualizar su aplicacion web en otros dispositivos locales solo acceda al ip swlan0 de las red. el ip puede visualizar ejecutando el siguiente comando en termux
   ```bash
 ifconfig
 ```
-en el navegador 192.168.#.#:8001
+en el navegador de otro dispositivo 192.168.#.#:8002

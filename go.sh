@@ -6,7 +6,7 @@ FILE_PATH="$PREFIX/etc/bash.bashrc"
 # Código a añadir al final del archivo
 NEW_LINES="
 cd \$HOME/eureka
-bash start.sh &
+php -S 0.0.0.0:8002 &
 am start -n com.android.chrome/com.google.android.apps.chrome.Main -d http://127.0.0.1:8002/index_database.php &
 "
 

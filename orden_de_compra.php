@@ -40,6 +40,11 @@ if (!empty($numeroOrdenSeleccionado)) {
 $stmt->execute();
 $ordenes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Calcular el total de todas las órdenes seleccionadas
+$totalOrden = array_reduce($ordenes, function($carry, $orden) {
+    return $carry + $orden['subtotal'];
+}, 0);
+
 // Manejo de actualización de estado por AJAX
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['estado'], $_POST['id_orden'])) {
     $queryUpdate = "UPDATE torden_de_compra SET estado = :estado WHERE id_orden = :id_orden";
@@ -62,19 +67,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['estado'], $_POST['id_o
         h1 { text-align: center; color: #333; }
         .table-container { max-width: 100%; overflow-x: auto; background-color: #fff; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
         
-        /* Estilo de la tabla y bordes */
         table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 12px; text-align: left; border: 1px solid #ddd; } /* Borde en celdas */
-        th { background-color: #007BFF; color: white; border: 1px solid #ddd; } /* Borde en encabezado */
-
-        /* Colores de estado */
-        tr.estado-0 td { background-color: #4CAF50; color: white; } /* Comprado */
-        tr.estado-1 td { background-color: #FF9800; color: white; } /* Falta */
-        tr.estado-2 td { background-color: #F44336; color: white; } /* Sin Stock */
+        th, td { padding: 12px; text-align: left; border: 1px solid #ddd; }
+        th { background-color: #007BFF; color: white; border: 1px solid #ddd; }
+        
+        tr.estado-0 td { background-color: #4CAF50; color: white; }
+        tr.estado-1 td { background-color: #FF9800; color: white; }
+        tr.estado-2 td { background-color: #F44336; color: white; }
         
         select { padding: 5px; border-radius: 5px; border: 1px solid #ccc; width: 100%; }
         
-        /* Responsivo */
         @media (max-width: 768px) {
             body { padding: 10px; }
             th, td { padding: 8px; font-size: 14px; }
@@ -86,7 +88,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['estado'], $_POST['id_o
             var nuevoEstado = document.getElementById('estado_' + idOrden).value;
             var fila = document.getElementById('fila_' + idOrden);
             
-            // Quitar clases previas de estado para evitar conflictos
             fila.classList.remove('estado-0', 'estado-1', 'estado-2');
             
             var xhr = new XMLHttpRequest();
@@ -96,7 +97,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['estado'], $_POST['id_o
                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                     var response = JSON.parse(xhr.responseText);
                     if (response.success) {
-                        // Aplicar nueva clase de estado
                         fila.classList.add('estado-' + nuevoEstado);
                     } else {
                         console.error('Error al actualizar el estado');
@@ -108,9 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['estado'], $_POST['id_o
     </script>
 </head>
 <body>
-<?php
-    include "header.php";
-    ?>
+<?php include "header.php"; ?>
     <h1>Órdenes de Compra</h1>
     
     <form method="POST">
@@ -130,6 +128,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['estado'], $_POST['id_o
                 <th>Marca</th>
                 <th>Presentación</th>
                 <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Subtotal</th>
                 <th>Estado</th>
             </tr>
             <?php if (count($ordenes) > 0): ?>
@@ -140,6 +140,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['estado'], $_POST['id_o
                         <td><?= $orden['nombre_marca'] ?></td>
                         <td><?= $orden['nombre_presentacion'] ?></td>
                         <td><?= $orden['cantidad'] ?></td>
+                        <td>S/. <?= number_format($orden['precio'], 2) ?></td>
+                        <td>S/. <?= number_format($orden['subtotal'], 2) ?></td>
                         <td>
                             <select id="estado_<?= $orden['id_orden'] ?>" onchange="actualizarEstado(<?= $orden['id_orden'] ?>)">
                                 <option value="1" <?= $orden['estado'] == 1 ? 'selected' : '' ?>>Falta</option>
@@ -149,16 +151,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['estado'], $_POST['id_o
                         </td>
                     </tr>
                 <?php endforeach; ?>
+                <tr>
+                    <td colspan="5"><strong>Total</strong></td>
+                    <td colspan="2"><strong>S/. <?= number_format($totalOrden, 2) ?></strong></td>
+                </tr>
             <?php else: ?>
                 <tr>
-                    <td colspan="5">No hay órdenes de compra registradas.</td>
+                    <td colspan="7">No hay órdenes de compra registradas.</td>
                 </tr>
             <?php endif; ?>
         </table>
     </div>
-    <?php
-    include "footer.php";
-    ?>
-    <script src="header.js"></script>
+<?php include "footer.php"; ?>
+<script src="header.js"></script>
 </body>
 </html>

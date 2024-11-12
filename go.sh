@@ -5,28 +5,21 @@ FILE_PATH="$PREFIX/etc/bash.bashrc"
 
 # Código a añadir al final del archivo con un mensaje de bienvenida decorado y validaciones
 NEW_LINES=$(cat <<'EOF'
-echo -e "\033[1;32m========================================\033[0m"
-echo -e "\033[1;34m    Welcome to Eureka Terminal! 🚀\033[0m"
-echo -e "\033[1;32m========================================\033[0m"
+# Comprobación de paquetes php y sqlite3
+if command -v php >/dev/null 2>&1 && command -v sqlite3 >/dev/null 2>&1; then
+    echo -e "\033[1;32m========================================\033[0m"
+    echo -e "\033[1;34m    Welcome to Eureka Terminal! 🚀\033[0m"
+    echo -e "\033[1;32m========================================\033[0m"
 
-# Validar que PHP está instalado
-if ! command -v php &> /dev/null; then
-    echo "PHP no está instalado. Instalalo con: pkg install php"
-    exit 1
+    # Navegar al directorio y levantar el servidor
+    cd $HOME/eureka || exit
+    php -S 0.0.0.0:8002 &
+
+    # Abrir la URL en Google Chrome
+    am start -n com.android.chrome/com.google.android.apps.chrome.Main -d http://127.0.0.1:8002/index_database.php &
+else
+    echo -e "\033[1;31mError: Los paquetes php y sqlite3 no están instalados. Instálalos para continuar.\033[0m"
 fi
-
-# Validar que Android Activity Manager está disponible
-if ! command -v am &> /dev/null; then
-    echo "Activity Manager (am) no está disponible."
-    exit 1
-fi
-
-# Navegar al directorio y levantar el servidor
-cd $HOME/eureka
-php -S 0.0.0.0:8002 &
-
-# Abrir la URL en Google Chrome
-am start -n com.android.chrome/com.google.android.apps.chrome.Main -d http://127.0.0.1:8002/index_database.php &
 EOF
 )
 

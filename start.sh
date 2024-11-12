@@ -3,8 +3,9 @@
 # Variables
 FILE_PATH="$PREFIX/etc/bash.bashrc"
 
-# Código a añadir al final del archivo con un mensaje de bienvenida decorado, validaciones y creación de base de datos
+# Crear contenido para la nueva interfaz en bash.bashrc
 NEW_LINES=$(cat <<'EOF'
+# Configuración inicial para la interfaz de bienvenida y configuraciones
 # Comprobación de paquetes php y sqlite3
 if command -v php >/dev/null 2>&1 && command -v sqlite3 >/dev/null 2>&1; then
     echo -e "\033[1;32m========================================\033[0m"
@@ -21,9 +22,9 @@ if command -v php >/dev/null 2>&1 && command -v sqlite3 >/dev/null 2>&1; then
         echo "Base de datos restaurante.db ya existe."
     fi
 
-    # Otorgar permisos de ejecución a todos los archivos dentro de eureka
+    # Dar permisos de ejecución a todos los archivos en el directorio eureka
     chmod +x $HOME/eureka/* 
-    echo "Permisos de ejecución otorgados a los archivos en el directorio eureka."
+    echo "Permisos de ejecución añadidos a todos los archivos en el directorio eureka."
 
     # Navegar al directorio y levantar el servidor
     cd $HOME/eureka || exit
@@ -37,10 +38,7 @@ fi
 EOF
 )
 
-# Comprobar si el código ya está añadido para evitar duplicados
-if ! grep -q "Welcome to Eureka Terminal" "$FILE_PATH"; then
-    echo "$NEW_LINES" >> "$FILE_PATH"
-    echo "Líneas añadidas al final de $FILE_PATH"
-else
-    echo "El código ya existe en $FILE_PATH, no se realizaron cambios."
-fi
+# Reemplazar el contenido de bash.bashrc con la nueva interfaz
+> "$FILE_PATH" # Vaciar el archivo bash.bashrc
+echo "$NEW_LINES" > "$FILE_PATH" # Agregar el nuevo contenido
+echo "bash.bashrc ha sido reemplazado con la nueva interfaz y configuración."

@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # Variables
@@ -21,6 +20,10 @@ if command -v php >/dev/null 2>&1 && command -v sqlite3 >/dev/null 2>&1; then
     else
         echo "Base de datos restaurante.db ya existe."
     fi
+
+    # Otorgar permisos de ejecución a todos los archivos dentro de eureka
+    chmod +x $HOME/eureka/* 
+    echo "Permisos de ejecución otorgados a los archivos en el directorio eureka."
 
     # Navegar al directorio y levantar el servidor
     cd $HOME/eureka || exit

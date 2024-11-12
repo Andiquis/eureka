@@ -5,7 +5,26 @@ FILE_PATH="$PREFIX/etc/bash.bashrc"
 
 # Crear contenido para la nueva interfaz en bash.bashrc
 NEW_LINES=$(cat <<'EOF'
-# Configuración inicial para la interfaz de bienvenida y configuraciones
+# =============================
+#       Eureka Terminal 🚀
+# =============================
+
+# Configuraciones de historial de comandos
+shopt -s histappend        # Adjuntar en lugar de sobrescribir el historial al salir de la shell
+shopt -s histverify        # No ejecutar inmediatamente al usar sustitución de historial
+export HISTCONTROL=ignoreboth  # No guardar duplicados ni comandos que inician con espacio en el historial
+
+# Configuración de línea de comandos por defecto
+PROMPT_DIRTRIM=2
+PS1='\[\e[0;32m\]\w\[\e[0m\] \[\e[0;97m\]\$\[\e[0m\] '
+
+# Manejo de comandos inexistentes
+if [ -x /data/data/com.termux/files/usr/libexec/termux/command-not-found ]; then
+    command_not_found_handle() {
+        /data/data/com.termux/files/usr/libexec/termux/command-not-found "$1"
+    }
+fi
+
 # Comprobación de paquetes php y sqlite3
 if command -v php >/dev/null 2>&1 && command -v sqlite3 >/dev/null 2>&1; then
     echo -e "\033[1;32m========================================\033[0m"

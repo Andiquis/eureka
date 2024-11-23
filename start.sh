@@ -60,4 +60,4 @@ EOF
 # Reemplazar el contenido de bash.bashrc con la nueva interfaz
 > "$FILE_PATH" # Vaciar el archivo bash.bashrc
 echo "$NEW_LINES" > "$FILE_PATH" # Agregar el nuevo contenido
-echo "bash.bashrc ha sido reemplazado con la nueva interfaz y configuración."
+echo "bash.bashrc ha sido reemplazado con la nueva interfaz y configuración. Reinicie su terminal"

@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     $id_marca = $_POST['id_marca'];
     $id_presentacion = $_POST['id_presentacion'];
     $precio = $_POST['precio'];
-    $fecha_registro = $_POST['fecha_registro'];
+    $fecha_registro = date('Y-m-d');
     $detalles = !empty($_POST['detalles']) ? $_POST['detalles'] : 'ninguna';
 
     // Verificar si ya existe el inventario
@@ -205,9 +205,6 @@ $(document).ready(function() {
 
             <label>Precio:</label>
             <input type="number" name="precio" step="0.01" required>
-
-            <label>Fecha de Registro:</label>
-            <input type="date" name="fecha_registro" required>
 
             <label>Detalles:</label>
             <input type="text" name="detalles">

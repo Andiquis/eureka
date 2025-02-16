@@ -1,63 +1,118 @@
 #!/bin/bash
 
-# Variables
+# ==============================
+# CONFIGURACIÓN bash.bashrc
+# ==============================
+
 FILE_PATH="$PREFIX/etc/bash.bashrc"
 
-# Crear contenido para la nueva interfaz en bash.bashrc
-NEW_LINES=$(cat <<'EOF'
+# Reemplazar el contenido de bash.bashrc con una nueva configuración
+CONFIG_BASH=$(cat <<'EOF'
 # =============================
-#       Eureka Terminal 🚀
+#      🌟 ANDI SYSTEM 🌟
 # =============================
 
-# Configuraciones de historial de comandos
-shopt -s histappend        # Adjuntar en lugar de sobrescribir el historial al salir de la shell
-shopt -s histverify        # No ejecutar inmediatamente al usar sustitución de historial
-export HISTCONTROL=ignoreboth  # No guardar duplicados ni comandos que inician con espacio en el historial
+# Configuración del historial de comandos
+shopt -s histappend
+shopt -s histverify
+export HISTCONTROL=ignoreboth
 
-# Configuración de línea de comandos por defecto
+# Personalización del prompt con colores
 PROMPT_DIRTRIM=2
-PS1='\[\e[0;32m\]\w\[\e[0m\] \[\e[0;97m\]\$\[\e[0m\] '
+PS1='\e[1;34m \e[1;32m\w\e[1;36m ➜ \e[1;37m'
 
-# Manejo de comandos inexistentes
-if [ -x /data/data/com.termux/files/usr/libexec/termux/command-not-found ]; then
-    command_not_found_handle() {
-        /data/data/com.termux/files/usr/libexec/termux/command-not-found "$1"
-    }
-fi
+# Interfaz visual al iniciar la terminal
+clear
+echo -e "\033[1;36m========================================\033[0m"
+echo -e "\033[1;33m        🚀 BIENVENIDO A ANDI 🚀        \033[0m"
+echo -e "\033[1;36m========================================\033[0m"
 
-# Comprobación de paquetes php y sqlite3
+echo -e "\033[1;34m █████╗ ███╗   ██╗██████╗ ██╗ \033[0m"
+echo -e "\033[1;34m██╔══██╗████╗  ██║██╔══██╗██║ \033[0m"
+echo -e "\033[1;34m███████║██╔██╗ ██║██║  ██║██║ \033[0m"
+echo -e "\033[1;34m██╔══██║██║╚██╗██║██║  ██║██║ \033[0m"
+echo -e "\033[1;34m██║  ██║██║ ╚████║██████╔╝███████╗ \033[0m"
+echo -e "\033[1;34m╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝ ╚══════╝ \033[0m"
+
+echo -e "\n\033[1;32m🌟 Proyecto: \033[0mEureka"
+echo -e "\033[1;32m👤 Autor: \033[0mAndi"
+echo -e "\033[1;32m🔌 Puerto usado: \033[0m8000"
+echo -e "\033[1;32m📝 Descripción: \033[0mSistema de Restobar"
+echo -e "\033[1;32m🟢 Estado: \033[0mServidor corriendo"
+
+# Verificar instalación de PHP y SQLite3
 if command -v php >/dev/null 2>&1 && command -v sqlite3 >/dev/null 2>&1; then
-    echo -e "\033[1;32m========================================\033[0m"
-    echo -e "\033[1;34m    Welcome to Eureka Terminal! 🚀\033[0m"
-    echo -e "\033[1;32m========================================\033[0m"
-
-    # Verificar si la base de datos restaurante.db existe, si no, crearla ejecutando db_create.php
-    DB_PATH="$HOME/eureka/restaurante.db"
-    if [ ! -f "$DB_PATH" ]; then
-        echo "Base de datos restaurante.db no encontrada. Creándola..."
-        php "$HOME/eureka/db_create.php"
-        echo "Base de datos restaurante.db creada."
-    else
-        echo "Base de datos restaurante.db ya existe."
-    fi
-
-    # Dar permisos de ejecución a todos los archivos en el directorio eureka
-    chmod +x $HOME/eureka/* 
-    echo "Permisos de ejecución añadidos a todos los archivos en el directorio eureka."
-
-    # Navegar al directorio y levantar el servidor
-    cd $HOME/eureka || exit
-    php -S 0.0.0.0:8002 &
-
-    # Abrir la URL en Google Chrome
-    am start -n com.android.chrome/com.google.android.apps.chrome.Main -d http://127.0.0.1:8002/index_database.php &
+    echo -e "\033[1;32m✔ PHP y SQLite3 están instalados.\033[0m"
 else
-    echo -e "\033[1;31mError: Los paquetes php y sqlite3 no están instalados. Instálalos para continuar.\033[0m"
+    echo -e "\033[1;31m✖ ERROR: PHP y SQLite3 no están instalados. Instálalos para continuar.\033[0m"
 fi
+
+# Verificar existencia de la base de datos y crearla si no existe
+DB_PATH="$HOME/eureka/restaurante.db"
+if [ ! -f "$DB_PATH" ]; then
+    echo -e "\033[1;36m📂 Creando la base de datos vocabulario.db...\033[0m"
+    php "$HOME/eureka/db_create.php"
+    echo -e "\033[1;32m✔ Base de datos creada.\033[0m"
+else
+    echo -e "\033[1;34m✔ Base de datos encontrada.\033[0m"
+fi
+
+# Dar permisos de ejecución a archivos en cingles
+chmod +x $HOME/eureka/*
+echo -e "\033[1;32m✔ Permisos de ejecución añadidos.\033[0m"
+
+# Iniciar el servidor PHP automáticamente
+cd $HOME/eureka || exit
+php -S 0.0.0.0:8000 &
+
+# Abrir la URL en Google Chrome
+am start -n com.android.chrome/com.google.android.apps.chrome.Main -d http://127.0.0.1:8000/eureka/index.php &
 EOF
 )
 
-# Reemplazar el contenido de bash.bashrc con la nueva interfaz
-> "$FILE_PATH" # Vaciar el archivo bash.bashrc
-echo "$NEW_LINES" > "$FILE_PATH" # Agregar el nuevo contenido
-echo "bash.bashrc ha sido reemplazado con la nueva interfaz y configuración. Reinicie su terminal"
+# Sobrescribir bash.bashrc con la nueva configuración
+echo "$CONFIG_BASH" > "$FILE_PATH"
+echo "✅ bash.bashrc actualizado. Reinicia Termux para aplicar los cambios."
+
+# ==============================
+# MENÚ INTERACTIVO PARA EL USUARIO
+# ==============================
+
+while true; do
+    clear
+    echo -e "\033[1;36m====================================\033[0m"
+    echo -e "\033[1;33m     🌍 SERVIDOR PHP - TERMUX 🚀     \033[0m"
+    echo -e "\033[1;36m====================================\033[0m"
+    echo -e "\033[1;34m 1) \033[1;32mIniciar servidor\033[0m"
+    echo -e "\033[1;34m 2) \033[1;31mDetener servidor\033[0m"
+    echo -e "\033[1;34m 3) \033[1;33mAbrir en navegador\033[0m"
+    echo -e "\033[1;34m 4) \033[1;31mSalir\033[0m"
+    echo -e "\033[1;36m====================================\033[0m"
+
+    read -p $'\033[1;37mSeleccione una opción: \033[0m' opcion
+
+    case $opcion in
+        1)
+            echo -e "\033[1;32m🚀 Iniciando servidor en el puerto 8001...\033[0m"
+            php -S 0.0.0.0:8000 -t /data/data/com.termux/files/home &
+            sleep 2
+            ;;
+        2)
+            echo -e "\033[1;31m🛑 Deteniendo servidor...\033[0m"
+            pkill -f "php -S 0.0.0.0:8000"
+            sleep 2
+            ;;
+        3)
+            echo -e "\033[1;33m🔄 Abriendo en el navegador...\033[0m"
+            am start -n com.android.chrome/com.google.android.apps.chrome.Main -d http://127.0.0.1:8000/eureka/index.php &
+            ;;
+        4)
+            echo -e "\033[1;31m👋 Saliendo...\033[0m"
+            exit 0
+            ;;
+        *)
+            echo -e "\033[1;31m❌ Opción inválida. Inténtalo de nuevo.\033[0m"
+            sleep 2
+            ;;
+    esac
+done

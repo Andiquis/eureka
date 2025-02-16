@@ -9,6 +9,16 @@ NEW_LINES=$(cat <<'EOF'
 #       Eureka Terminal 🚀
 # =============================
 
+# Logo ASCII de Eureka
+cat << "EUREKA"
+  ███████╗██╗   ██╗███████╗██████╗  █████╗ 
+  ██╔════╝██║   ██║██╔════╝██╔══██╗██╔══██╗
+  █████╗  ██║   ██║█████╗  ██████╔╝███████║
+  ██╔══╝  ╚██╗ ██╔╝██╔══╝  ██╔═══╝ ██╔══██║
+  ███████╗ ╚████╔╝ ███████╗██║     ██║  ██║
+  ╚══════╝  ╚═══╝  ╚══════╝╚═╝     ╚═╝  ╚═╝
+EUREKA
+
 # Configuraciones de historial de comandos
 shopt -s histappend        # Adjuntar en lugar de sobrescribir el historial al salir de la shell
 shopt -s histverify        # No ejecutar inmediatamente al usar sustitución de historial
@@ -49,8 +59,12 @@ if command -v php >/dev/null 2>&1 && command -v sqlite3 >/dev/null 2>&1; then
     cd $HOME/eureka || exit
     php -S 0.0.0.0:8002 &
 
-    # Abrir la URL en Google Chrome
-    am start -n com.android.chrome/com.google.android.apps.chrome.Main -d http://127.0.0.1:8002/index_database.php &
+    # Preguntar si se quiere abrir en navegador
+    echo -n "¿Desea abrir en el navegador? (s/n): "
+    read abrir_navegador
+    if [ "$abrir_navegador" = "s" ]; then
+        am start -n com.android.chrome/com.google.android.apps.chrome.Main -d http://127.0.0.1:8002/index_database.php &
+    fi
 else
     echo -e "\033[1;31mError: Los paquetes php y sqlite3 no están instalados. Instálalos para continuar.\033[0m"
 fi

@@ -8,16 +8,16 @@ FILE_PATH="$PREFIX/etc/bash.bashrc"
 
 # Reemplazar el contenido de bash.bashrc con una nueva configuración
 CONFIG_BASH=$(cat <<'EOF'
-# =============================
-#      🌟 ANDI SYSTEM 🌟
-# =============================
+# =============================#
+#      🌟 ANDI SYSTEM 🌟      #
+# =============================#
 
 # Configuración del historial de comandos
 shopt -s histappend
 shopt -s histverify
 export HISTCONTROL=ignoreboth
 
-# Personalización del prompt con colores
+# Personalización del prompt con colores.
 PROMPT_DIRTRIM=2
 PS1='\e[1;34m \e[1;32m\w\e[1;36m ➜ \e[1;37m'
 
@@ -63,10 +63,11 @@ echo -e "\033[1;32m✔ Permisos de ejecución añadidos.\033[0m"
 
 # Iniciar el servidor PHP automáticamente
 cd $HOME/eureka || exit
-php -S 0.0.0.0:8000 &
+php -S 0.0.0.0:8000 -t $HOME/eureka &
+
 
 # Abrir la URL en Google Chrome
-am start -n com.android.chrome/com.google.android.apps.chrome.Main -d http://127.0.0.1:8000/eureka/index.php &
+am start -n com.android.chrome/com.google.android.apps.chrome.Main -d http://localhost:8000/eureka/index.php &
 EOF
 )
 
@@ -94,7 +95,7 @@ while true; do
     case $opcion in
         1)
             echo -e "\033[1;32m🚀 Iniciando servidor en el puerto 8001...\033[0m"
-            php -S 0.0.0.0:8000 -t /data/data/com.termux/files/home &
+            php -S 0.0.0.0:8000 -t $HOME/eureka &
             sleep 2
             ;;
         2)
@@ -104,7 +105,7 @@ while true; do
             ;;
         3)
             echo -e "\033[1;33m🔄 Abriendo en el navegador...\033[0m"
-            am start -n com.android.chrome/com.google.android.apps.chrome.Main -d http://127.0.0.1:8000/eureka/index.php &
+            am start -n com.android.chrome/com.google.android.apps.chrome.Main -d http://localhost:8000/eureka/index.php &
             ;;
         4)
             echo -e "\033[1;31m👋 Saliendo...\033[0m"

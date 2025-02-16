@@ -67,7 +67,7 @@ php -S 0.0.0.0:8000 -t $HOME/eureka &
 
 
 # Abrir la URL en Google Chrome
-am start -n com.android.chrome/com.google.android.apps.chrome.Main -d http://localhost:8000/eureka/index.php &
+am start -n com.android.chrome/com.google.android.apps.chrome.Main -d http://localhost:8000/eureka/index_database.php &
 EOF
 )
 
@@ -105,7 +105,7 @@ while true; do
             ;;
         3)
             echo -e "\033[1;33m🔄 Abriendo en el navegador...\033[0m"
-            am start -n com.android.chrome/com.google.android.apps.chrome.Main -d http://localhost:8000/eureka/index.php &
+            am start -n com.android.chrome/com.google.android.apps.chrome.Main -d http://localhost:8000/eureka/index_database.php &
             ;;
         4)
             echo -e "\033[1;31m👋 Saliendo...\033[0m"
